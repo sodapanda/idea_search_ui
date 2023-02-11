@@ -18,11 +18,10 @@
 <SvelteUIProvider>
 	<div class="bg-slate-100 w-auto h-screen flex flex-row">
 		<div
-			class="w-64 bg-slate-600 overflow-y-auto h-full flex flex-col [&>*]:shrink-0 [&>*]:min-w-[50%] items-center gap-8"
+			class="w-64 bg-slate-600 overflow-y-auto h-full flex flex-col items-center gap-2 pt-8"
 		>
-			<div class="h-0" />
 			{#each pages as page (page.path)}
-				<Button
+				<Button class="min-w-[80%] shrink-0"
 					on:click={() => {
 						navi(page.path);
 					}}>{page.title}</Button
