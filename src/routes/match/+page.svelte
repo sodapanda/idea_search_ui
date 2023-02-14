@@ -8,15 +8,37 @@
 	let roleList: Role[] = [];
 	let currentRole: Role;
 
+	let needsList: Needs[] = [];
+	let abilityList: Ability[] = [];
+
 	async function getRoleList() {
 		const rsp = await fetch('http://127.0.0.1:8787/role/get');
 		const rspJson = await rsp.json();
 		roleList = rspJson;
 	}
 
+	async function getNeedsList(roleId: number) {
+		const rsp = await fetch(`http://127.0.0.1:8787/needs/get?role_id=${roleId}`);
+		const rspJson = await rsp.json();
+		needsList = rspJson;
+	}
+
+	async function getAbilityList() {
+		const rsp = await fetch('http://127.0.0.1:8787/ability/get');
+		const rspJson = await rsp.json();
+		abilityList = rspJson;
+	}
+
 	onMount(async () => {
 		await getRoleList();
+		await getAbilityList();
 	});
+
+	$: if (currentRole) {
+		getNeedsList(currentRole.id).then(() => {
+			console.log('updated');
+		});
+	}
 </script>
 
 <div class="h-full w-full bg-slate-200 flex flex-row">
@@ -30,7 +52,43 @@
 			>
 		{/each}
 	</div>
-	<div class="w-full h-full p-8">
+	<div class="w-full h-full p-8 overflow-scroll">
 		<Title order={2}>{currentRole?.rolename || '未选择'}</Title>
+		<div class="w-96 flex flex-row">
+			<table class="shrink-0 table-auto border-collapse border border-slate-400 ">
+				<tr>
+					<th class="border border-slate-300 h-36">能力</th>
+				</tr>
+				{#each abilityList as ability (ability.id)}
+					<tr>
+						<td class="border border-slate-300">{ability.abilityname}</td>
+					</tr>
+				{/each}
+			</table>
+			<table class="w-full table-auto border-collapse border border-slate-400 shrink-0">
+				<tr>
+					{#each needsList as needs (needs.id)}
+						<th class="h-36 border border-slate-300">{needs.needcontent}</th>
+					{/each}
+				</tr>
+
+				{#each abilityList as ability (ability.id)}
+					<tr>
+						{#each needsList as needs (needs.id)}
+							<td class="border border-slate-300">
+								<div class="bg-red-200">
+									<Text>{`能力:${ability.abilityname},需求:${needs.needcontent}`}</Text>
+									<Button
+										on:click={() => {
+											console.log(`click: ${ability.id} , ${needs.id}`);
+										}}>添加</Button
+									>
+								</div>
+							</td>
+						{/each}
+					</tr>
+				{/each}
+			</table>
+		</div>
 	</div>
 </div>
