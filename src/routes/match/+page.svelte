@@ -132,14 +132,15 @@
 								<div class="w-48">
 									{#if match.matchcontent}
 										<Text>{match.matchcontent}</Text>
+									{:else}
+										<Button
+											class="m-auto"
+											on:click={() => {
+												editIdea = match;
+												opened = true;
+											}}>添加</Button
+										>
 									{/if}
-									<Button
-										class="m-auto"
-										on:click={() => {
-											editIdea = match;
-											opened = true;
-										}}>添加</Button
-									>
 								</div>
 							</td>
 						{/each}
