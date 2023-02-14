@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { Button, TextInput, Text, Title } from '@svelteuidev/core';
+	import { Button, TextInput, Text, Title, Modal } from '@svelteuidev/core';
 	import type { Role } from '../../model/role';
 	import type { Needs } from '../../model/needs';
 	import type { Ability } from '../../model/ability';
@@ -12,10 +12,22 @@
 	let needsList: Needs[] = [];
 	let abilityList: Ability[] = [];
 
+	let matchTable: Match[][] = [];
+
+	let opened = false;
+	let inputIdea = '';
+	let editIdea: Match;
+
 	async function getRoleList() {
 		const rsp = await fetch('http://127.0.0.1:8787/role/get');
 		const rspJson = await rsp.json();
 		roleList = rspJson;
+	}
+
+	async function getAbilityList() {
+		const rsp = await fetch('http://127.0.0.1:8787/ability/get');
+		const rspJson = await rsp.json();
+		abilityList = rspJson;
 	}
 
 	async function getNeedsList(roleId: number) {
@@ -24,10 +36,35 @@
 		needsList = rspJson;
 	}
 
-	async function getAbilityList() {
-		const rsp = await fetch('http://127.0.0.1:8787/ability/get');
-		const rspJson = await rsp.json();
-		abilityList = rspJson;
+	async function buildMatchTable(roleId: number) {
+		await getNeedsList(roleId);
+
+		const rsp = await fetch(`http://127.0.0.1:8787/match/get?roleid=${roleId}`);
+		const matchJson: Match[] = (await rsp.json()) as Match[];
+
+		const tmpMatchTable = [];
+
+		for (const ability of abilityList) {
+			const matchList: Match[] = [];
+			for (const needs of needsList) {
+				const match: Match = {
+					abilityid: ability.id,
+					needsid: needs.id,
+					matchcontent: '',
+					id: 0
+				};
+
+				for (const dbMatch of matchJson) {
+					if (dbMatch.abilityid === ability.id && dbMatch.needsid === needs.id) {
+						match.matchcontent = dbMatch.matchcontent;
+					}
+				}
+				matchList.push(match);
+			}
+			tmpMatchTable.push(matchList);
+		}
+
+		matchTable = tmpMatchTable;
 	}
 
 	async function addMatch(match: Match) {
@@ -46,8 +83,12 @@
 		await getAbilityList();
 	});
 
+	function closeModal() {
+		opened = false;
+	}
+
 	$: if (currentRole) {
-		getNeedsList(currentRole.id).then(() => {
+		buildMatchTable(currentRole.id).then(() => {
 			console.log('updated');
 		});
 	}
@@ -84,21 +125,19 @@
 					{/each}
 				</tr>
 
-				{#each abilityList as ability (ability.id)}
+				{#each matchTable as matchList}
 					<tr>
-						{#each needsList as needs (needs.id)}
+						{#each matchList as match}
 							<td class="border border-slate-300 ">
 								<div class="w-48">
+									{#if match.matchcontent}
+										<Text>{match.matchcontent}</Text>
+									{/if}
 									<Button
 										class="m-auto"
 										on:click={() => {
-											console.log(`click: ${ability.id} , ${needs.id}`);
-											addMatch({
-												matchcontent: 'Good',
-												abilityid: ability.id,
-												needsid: needs.id,
-												id: 0
-											});
+											editIdea = match;
+											opened = true;
 										}}>添加</Button
 									>
 								</div>
@@ -110,3 +149,21 @@
 		</div>
 	</div>
 </div>
+
+<Modal {opened} on:close={closeModal} title="请输入idea">
+	<div>
+		<TextInput bind:value={inputIdea} placeholder="输入idea" />
+		<Button
+			on:click={async () => {
+				if (inputIdea) {
+					await addMatch({
+						...editIdea,
+						matchcontent: inputIdea
+					});
+					opened = false;
+				} else {
+				}
+			}}>确定</Button
+		>
+	</div>
+</Modal>
