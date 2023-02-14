@@ -107,6 +107,9 @@
 	</div>
 	<div class="w-full h-full p-8 overflow-scroll">
 		<Title order={2}>{currentRole?.rolename || '未选择'}</Title>
+		{#if needsList.length === 0}
+			<Title order={4}>无需求</Title>
+		{/if}
 		<div class="w-96 flex flex-row">
 			<table class="shrink-0 table-auto border-collapse border border-slate-400 ">
 				<tr>
@@ -131,7 +134,7 @@
 							<td class="border border-slate-300 ">
 								<div class="w-48">
 									{#if match.matchcontent}
-										<Text>{match.matchcontent}</Text>
+										<Text class="m-auto w-fit">{match.matchcontent}</Text>
 									{:else}
 										<Button
 											class="m-auto"
@@ -161,6 +164,7 @@
 						...editIdea,
 						matchcontent: inputIdea
 					});
+					await buildMatchTable(currentRole.id);
 					opened = false;
 				} else {
 				}
