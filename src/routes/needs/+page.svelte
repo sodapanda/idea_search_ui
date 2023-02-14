@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { roleStore } from '../IdeaStore';
-	import { Title, Button, TextInput, Text } from '@svelteuidev/core';
+	import { Button, Input, P, Heading } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 	import type { Needs } from '../../model/needs';
 
@@ -19,14 +19,14 @@
 </script>
 
 <div class="h-full w-full bg-slate-200 p-8">
-	<Title order={2}>{$roleStore.rolename}</Title>
+	<Heading>{$roleStore.rolename}</Heading>
 
 	<div class="flex flex-col w-96 gap-2 mt-8">
 		{#each needsList as needs (needs.id)}
 			<div class="flex flex-row justify-between items-center">
-				<Text>
+				<P>
 					{needs.needcontent}
-				</Text>
+				</P>
 				<Button
 					on:click={async () => {
 						const rsp = await fetch(`http://127.0.0.1:8787/needs/del?id=${needs.id}`);
@@ -40,7 +40,7 @@
 	</div>
 
 	<div class="flex flex-row w-96 gap-2 mt-8">
-		<TextInput class="grow" bind:value={intputNeeds} placeholder="新需求" />
+		<Input class="grow" bind:value={intputNeeds} placeholder="新需求" />
 		<Button
 			on:click={async () => {
 				const rsp = await fetch('http://127.0.0.1:8787/needs/add', {

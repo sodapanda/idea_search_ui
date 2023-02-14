@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { Button, TextInput, Text, Title, Modal } from '@svelteuidev/core';
+	import { Button, Input, P, Modal, Heading } from 'flowbite-svelte';
 	import type { Role } from '../../model/role';
 	import type { Needs } from '../../model/needs';
 	import type { Ability } from '../../model/ability';
@@ -106,9 +106,9 @@
 		{/each}
 	</div>
 	<div class="w-full h-full p-8 overflow-scroll">
-		<Title order={2}>{currentRole?.rolename || '未选择'}</Title>
+		<Heading>{currentRole?.rolename || '未选择'}</Heading>
 		{#if needsList.length === 0}
-			<Title order={4}>无需求</Title>
+			<Heading order={4}>无需求</Heading>
 		{/if}
 		<div class="w-96 flex flex-row">
 			<table class="shrink-0 table-auto border-collapse border border-slate-400 ">
@@ -134,7 +134,7 @@
 							<td class="border border-slate-300 ">
 								<div class="w-48">
 									{#if match.matchcontent}
-										<Text class="m-auto w-fit">{match.matchcontent}</Text>
+										<P class="m-auto w-fit">{match.matchcontent}</P>
 									{:else}
 										<Button
 											class="m-auto"
@@ -156,7 +156,7 @@
 
 <Modal {opened} on:close={closeModal} title="请输入idea">
 	<div>
-		<TextInput bind:value={inputIdea} placeholder="输入idea" />
+		<Input bind:value={inputIdea} placeholder="输入idea" />
 		<Button
 			on:click={async () => {
 				if (inputIdea) {

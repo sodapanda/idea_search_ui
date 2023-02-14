@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	import { Button, TextInput, Text } from '@svelteuidev/core';
+	import { Button, Input, P } from 'flowbite-svelte';
 	import { roleStore } from '../IdeaStore';
 	import type { Role } from '../../model/role';
 
@@ -44,7 +44,7 @@
 <div class="h-full w-full bg-slate-200 p-8">
 	{#each roles as role (role.id)}
 		<div class="flex flex-row items-center gap-2 mb-2 w-96  justify-between">
-			<Text>{role.rolename}</Text>
+			<P>{role.rolename}</P>
 			<div class="flex flex-row gap-2 [&>*]:shrink-0">
 				<Button
 					on:click={() => {
@@ -63,7 +63,7 @@
 	{/each}
 
 	<div class="flex flex-row items-center gap-2 mt-4 w-96 justify-between">
-		<TextInput class="grow" bind:value={inputRole} placeholder="角色" />
+		<Input class="grow" bind:value={inputRole} placeholder="角色" />
 		<Button
 			on:click={async () => {
 				if (inputRole) {
