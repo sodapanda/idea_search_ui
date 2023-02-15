@@ -15,7 +15,10 @@
 	let matchTable: Match[][] = [];
 
 	let opened = false;
-	let inputIdea = '';
+	let inputMatchContent = '';
+	let inputUserCommunity = '';
+	let inputNewInsight = '';
+	let inputUnfairAdvantage = '';
 	let editIdea: Match;
 
 	async function getRoleList() {
@@ -51,6 +54,9 @@
 					abilityid: ability.id,
 					needsid: needs.id,
 					matchcontent: '',
+					user_community: '',
+					new_insight: '',
+					unfair_advantage: '',
 					id: 0
 				};
 
@@ -160,14 +166,20 @@
 
 <Modal bind:open={opened} title="请输入idea">
 	<div>
-		<Input bind:value={inputIdea} placeholder="输入idea" />
+		<Input bind:value={inputMatchContent} placeholder="输入idea" />
+		<Input bind:value={inputUserCommunity} placeholder="在社区里跟真实用户聊过吗" />
+		<Input bind:value={inputNewInsight} placeholder="新技术新可能新洞见" />
+		<Input bind:value={inputUnfairAdvantage} placeholder="我来做的不公平优势" />
 		<Button
 			class="mt-2"
 			on:click={async () => {
-				if (inputIdea) {
+				if (inputMatchContent) {
 					await addMatch({
 						...editIdea,
-						matchcontent: inputIdea
+						matchcontent: inputMatchContent,
+						user_community: inputUserCommunity,
+						new_insight: inputNewInsight,
+						unfair_advantage: inputUnfairAdvantage
 					});
 					await buildMatchTable(currentRole.id);
 					opened = false;

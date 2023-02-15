@@ -1,9 +1,11 @@
 <script lang="ts">
 	import type { Ability } from '../../model/ability';
 	import { onMount } from 'svelte';
-	import { Button,P,Input } from 'flowbite-svelte';
+	import { Button, P, Input } from 'flowbite-svelte';
 	let abilityList: Ability[] = [];
 	let inputAbility = '';
+	let inputSdkApi = '';
+	let inputPlatform = '';
 
 	async function getAbility() {
 		const rsp = await fetch('http://127.0.0.1:8787/ability/get');
@@ -20,7 +22,7 @@
 	<div class="flex flex-col w-96 gap-2">
 		{#each abilityList as ability (ability.id)}
 			<div class="flex flex-row justify-between">
-				<P>{ability.abilityname}</P>
+				<P>{ability.abilityname} / {ability.platform} / {ability.api_sdk}</P>
 				<Button
 					on:click={async () => {
 						const rsp = await fetch(`http://127.0.0.1:8787/ability/del?id=${ability.id}`);
@@ -33,7 +35,10 @@
 	</div>
 	<div class="flex flex-row w-96 gap-2 mt-8">
 		<Input class="grow" bind:value={inputAbility} placeholder="输入能力" />
-		<Button class="shrink-0"
+		<Input class="grow" bind:value={inputPlatform} placeholder="平台" />
+		<Input class="grow" bind:value={inputSdkApi} placeholder="相关新SDK API" />
+		<Button
+			class="shrink-0"
 			on:click={async () => {
 				const rsp = await fetch('http://127.0.0.1:8787/ability/add', {
 					method: 'POST',
@@ -41,7 +46,9 @@
 						'Content-Type': 'application/json'
 					},
 					body: JSON.stringify({
-						abilityname: inputAbility
+						abilityname: inputAbility,
+						platform: inputPlatform,
+						api_sdk: inputSdkApi
 					})
 				});
 				await rsp.json();

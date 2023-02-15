@@ -41,7 +41,7 @@
 
 	<div class="flex flex-row w-96 gap-2 mt-8">
 		<Input class="grow" bind:value={intputNeeds} placeholder="新需求" />
-		<Button
+		<Button class="shrink-0"
 			on:click={async () => {
 				const rsp = await fetch('http://127.0.0.1:8787/needs/add', {
 					method: 'POST',

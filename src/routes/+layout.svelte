@@ -9,7 +9,8 @@
 		{ path: '/', title: '首页' },
 		{ path: '/roles', title: '角色' },
 		{ path: '/alibity', title: '能力' },
-		{ path: '/match', title: '匹配' }
+		{ path: '/match', title: '匹配' },
+		{ path: '/idea', title: 'idea' },
 	];
 </script>
 
