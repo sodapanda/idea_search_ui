@@ -57,6 +57,7 @@
 				for (const dbMatch of matchJson) {
 					if (dbMatch.abilityid === ability.id && dbMatch.needsid === needs.id) {
 						match.matchcontent = dbMatch.matchcontent;
+						match.id = dbMatch.id;
 					}
 				}
 				matchList.push(match);
@@ -82,10 +83,6 @@
 		await getRoleList();
 		await getAbilityList();
 	});
-
-	function closeModal() {
-		opened = false;
-	}
 
 	$: if (currentRole) {
 		buildMatchTable(currentRole.id).then(() => {
@@ -135,13 +132,20 @@
 								<div class="w-48">
 									{#if match.matchcontent}
 										<P class="m-auto w-fit">{match.matchcontent}</P>
+										<Button
+											on:click={async () => {
+												const rsp = fetch(`http://127.0.0.1:8787/match/del?match_id=${match.id}`);
+												await (await rsp).json();
+												buildMatchTable(currentRole.id);
+											}}>删除</Button
+										>
 									{:else}
 										<Button
-											class="m-auto"
+											class="m-auto w-fit"
 											on:click={() => {
 												editIdea = match;
 												opened = true;
-											}}>添加</Button
+											}}>详情</Button
 										>
 									{/if}
 								</div>
@@ -154,10 +158,11 @@
 	</div>
 </div>
 
-<Modal {opened} on:close={closeModal} title="请输入idea">
+<Modal bind:open={opened} title="请输入idea">
 	<div>
 		<Input bind:value={inputIdea} placeholder="输入idea" />
 		<Button
+			class="mt-2"
 			on:click={async () => {
 				if (inputIdea) {
 					await addMatch({

@@ -33,7 +33,7 @@
 	</div>
 	<div class="flex flex-row w-96 gap-2 mt-8">
 		<Input class="grow" bind:value={inputAbility} placeholder="输入能力" />
-		<Button
+		<Button class="shrink-0"
 			on:click={async () => {
 				const rsp = await fetch('http://127.0.0.1:8787/ability/add', {
 					method: 'POST',

@@ -64,7 +64,7 @@
 
 	<div class="flex flex-row items-center gap-2 mt-4 w-96 justify-between">
 		<Input class="grow" bind:value={inputRole} placeholder="角色" />
-		<Button
+		<Button class="shrink-0"
 			on:click={async () => {
 				if (inputRole) {
 					await addRole(inputRole);
