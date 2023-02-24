@@ -14,7 +14,7 @@
 	let matchList: Match[] = [];
 
 	onMount(async () => {
-		const rsp = await fetch('http://127.0.0.1:8787/match/get_all');
+		const rsp = await fetch('https://ideasearch.leucas.io/match/get_all');
 		const rspJson = (await rsp.json()) as Match[];
 
 		matchList = rspJson;

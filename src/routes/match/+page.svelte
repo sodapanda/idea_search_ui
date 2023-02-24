@@ -22,19 +22,19 @@
 	let editIdea: Match;
 
 	async function getRoleList() {
-		const rsp = await fetch('http://127.0.0.1:8787/role/get');
+		const rsp = await fetch('https://ideasearch.leucas.io/role/get');
 		const rspJson = await rsp.json();
 		roleList = rspJson;
 	}
 
 	async function getAbilityList() {
-		const rsp = await fetch('http://127.0.0.1:8787/ability/get');
+		const rsp = await fetch('https://ideasearch.leucas.io/ability/get');
 		const rspJson = await rsp.json();
 		abilityList = rspJson;
 	}
 
 	async function getNeedsList(roleId: number) {
-		const rsp = await fetch(`http://127.0.0.1:8787/needs/get?role_id=${roleId}`);
+		const rsp = await fetch(`https://ideasearch.leucas.io/needs/get?role_id=${roleId}`);
 		const rspJson = await rsp.json();
 		needsList = rspJson;
 	}
@@ -42,7 +42,7 @@
 	async function buildMatchTable(roleId: number) {
 		await getNeedsList(roleId);
 
-		const rsp = await fetch(`http://127.0.0.1:8787/match/get?roleid=${roleId}`);
+		const rsp = await fetch(`https://ideasearch.leucas.io/match/get?roleid=${roleId}`);
 		const matchJson: Match[] = (await rsp.json()) as Match[];
 
 		const tmpMatchTable = [];
@@ -75,7 +75,7 @@
 	}
 
 	async function addMatch(match: Match) {
-		const rsp = await fetch('http://127.0.0.1:8787/match/add', {
+		const rsp = await fetch('https://ideasearch.leucas.io/match/add', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -140,7 +140,7 @@
 										<P class="m-auto w-fit">{match.matchcontent}</P>
 										<Button
 											on:click={async () => {
-												const rsp = fetch(`http://127.0.0.1:8787/match/del?match_id=${match.id}`);
+												const rsp = fetch(`https://ideasearch.leucas.io/match/del?match_id=${match.id}`);
 												await (await rsp).json();
 												buildMatchTable(currentRole.id);
 											}}>删除</Button

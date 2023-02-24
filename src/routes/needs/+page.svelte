@@ -12,7 +12,7 @@
 	});
 
 	async function getNeeds() {
-		const rsp = await fetch(`http://127.0.0.1:8787/needs/get?role_id=${$roleStore.id}`);
+		const rsp = await fetch(`https://ideasearch.leucas.io/needs/get?role_id=${$roleStore.id}`);
 		const data = await rsp.json();
 		needsList = data as Needs[];
 	}
@@ -29,7 +29,7 @@
 				</P>
 				<Button
 					on:click={async () => {
-						const rsp = await fetch(`http://127.0.0.1:8787/needs/del?id=${needs.id}`);
+						const rsp = await fetch(`https://ideasearch.leucas.io/needs/del?id=${needs.id}`);
 						const rspJson = await rsp.json();
 						console.log(rspJson);
 						getNeeds();
@@ -43,7 +43,7 @@
 		<Input class="grow" bind:value={intputNeeds} placeholder="新需求" />
 		<Button class="shrink-0"
 			on:click={async () => {
-				const rsp = await fetch('http://127.0.0.1:8787/needs/add', {
+				const rsp = await fetch('https://ideasearch.leucas.io/needs/add', {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json'

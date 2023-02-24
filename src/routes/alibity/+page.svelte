@@ -8,7 +8,7 @@
 	let inputPlatform = '';
 
 	async function getAbility() {
-		const rsp = await fetch('http://127.0.0.1:8787/ability/get');
+		const rsp = await fetch('https://ideasearch.leucas.io/ability/get');
 		const rspJson = await rsp.json();
 		abilityList = rspJson;
 	}
@@ -25,7 +25,7 @@
 				<P>{ability.abilityname} / {ability.platform} / {ability.api_sdk}</P>
 				<Button
 					on:click={async () => {
-						const rsp = await fetch(`http://127.0.0.1:8787/ability/del?id=${ability.id}`);
+						const rsp = await fetch(`https://ideasearch.leucas.io/ability/del?id=${ability.id}`);
 						await rsp.json();
 						await getAbility();
 					}}>删除</Button
@@ -40,7 +40,7 @@
 		<Button
 			class="shrink-0"
 			on:click={async () => {
-				const rsp = await fetch('http://127.0.0.1:8787/ability/add', {
+				const rsp = await fetch('https://ideasearch.leucas.io/ability/add', {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json'

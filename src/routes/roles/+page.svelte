@@ -13,17 +13,17 @@
 	});
 
 	async function getRole() {
-		const rsp = await fetch('http://127.0.0.1:8787/role/get');
+		const rsp = await fetch('https://ideasearch.leucas.io/role/get');
 		const rspJson = await rsp.json();
 		roles = rspJson;
 	}
 
 	async function delRole(roleId: number) {
-		await fetch(`http://127.0.0.1:8787/role/del?id=${roleId}`);
+		await fetch(`https://ideasearch.leucas.io/role/del?id=${roleId}`);
 	}
 
 	async function addRole(roleNameStr: string) {
-		const response = await fetch('http://127.0.0.1:8787/role/add', {
+		const response = await fetch('https://ideasearch.leucas.io/role/add', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
